@@ -1,30 +1,3 @@
-// const quiz = [
-//   {
-//     question: "Q1",
-//     answers: ["a1", "b1", "c1", "d1"]
-//   },
-//   {
-//     question: "Q2",
-//     answers: ["a2", "b2", "c2", "d2"]
-//   },
-//   {
-//     question: "Q3",
-//     answers: ["a3", "b3", "c3", "d3"]
-//   }
-// ]
-
-// const createQuestion = () => {
-//   const questionHead = $("<h1>").text("Q");
-//   const answers = $("<div>").addClass("d-inline-flex flex-column");
-//   const ansA = $("<button>").attr("type", "button").addClass("btn m-1").text("a)");
-//   const ansB = $("<button>").attr("type", "button").addClass("btn m-1").text("b)");
-//   const ansC = $("<button>").attr("type", "button").addClass("btn m-1").text("c)");
-//   const ansD = $("<button>").attr("type", "button").addClass("btn m-1").text("d)");
-  
-//   answers.append(ansA, ansB, ansC, ansD);
-//   $("main").append(questionHead, answers)
-// }
-
 const quiz = [
   {
     question: "Q1",
@@ -68,14 +41,26 @@ const createQuestion = function() {
   questionId++;
 };
 
+const beginTimer = () => {
+  let timerStr = $("span.countdown").text();
+  let timerInt = parseInt(timerStr);
+  $("span.countdown").text(String(timerInt - 1));
+  
+  if (timerInt == 1) {
+    clearInterval(countdown);
+  };
+};
+
+const countdown = setInterval(beginTimer, 1000); // BUG countdown starts 2 fast every other reload
+
 $("#start-quiz").click(() => {
   $("#start-quiz").remove();
   createQuestion();
+  $(".timer").append($("<span>").addClass("countdown").text("100"));
+  beginTimer;
 });
 
 $("main").on("click", "#answer-choice", () => {
   $("main").empty();
   createQuestion();
 });
-
-// $.inArray();
