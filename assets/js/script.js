@@ -30,12 +30,21 @@ const createQuestion = function() {
 
   const questionHead = $("<h1>").text(question);
   const answers = $("<div>").attr("id", "answer-choice").addClass("d-inline-flex flex-column");
-  const ansA = $("<button>").prop("type", "button").addClass("btn m-1").text("a) " + questionAns[0]);
-  const ansB = $("<button>").prop("type", "button").addClass("btn m-1").text("b) " + questionAns[1]);
-  const ansC = $("<button>").prop("type", "button").addClass("btn m-1").text("c) " + questionAns[2]);
-  const ansD = $("<button>").prop("type", "button").addClass("btn m-1").text("d) " + questionAns[3]);
+  const ansChoices = ["a)", "b)", "c)", "d)"];
   
-  answers.append(ansA, ansB, ansC, ansD);
+  ansChoices.forEach(choice => {
+    console.log(ansChoices.indexOf(choice))
+    // $("<button>").prop("type", "button").addClass("btn m-1").text(choice + questionAns[indexOf(choice)]);
+
+    // answers.append(choice);
+  });
+
+  // const ansA = $("<button>").prop("type", "button").addClass("btn m-1").text("a) " + questionAns[0]);
+  // const ansB = $("<button>").prop("type", "button").addClass("btn m-1").text("b) " + questionAns[1]);
+  // const ansC = $("<button>").prop("type", "button").addClass("btn m-1").text("c) " + questionAns[2]);
+  // const ansD = $("<button>").prop("type", "button").addClass("btn m-1").text("d) " + questionAns[3]);
+  
+  // answers.append(ansA, ansB, ansC, ansD);
   $("main").append(questionHead, answers);
 
   questionId++;
@@ -53,6 +62,15 @@ const beginTimer = () => {
 
 const countdown = setInterval(beginTimer, 1000); // BUG countdown starts 2 fast every other reload
 
+// const addTime = (beginTimer)
+
+const timerHandler = (event) => {
+  const target = $(event.target);
+  console.log(target);
+  // if ()
+  // timerStr -= 10;
+}
+
 $("#start-quiz").click(() => {
   $("#start-quiz").remove();
   createQuestion();
@@ -64,3 +82,5 @@ $("main").on("click", "#answer-choice", () => {
   $("main").empty();
   createQuestion();
 });
+
+$("main").on("click", "#answer-choice", timerHandler);
