@@ -1,3 +1,8 @@
+let player = {
+  name: "",
+  score: 0
+};
+
 const quiz = [
   {
     question: "Q1",
@@ -53,6 +58,16 @@ const quiz = [
 
 let questionId = 0;
 
+const startQuiz = () => {
+  $("#start-quiz").remove();
+  $("#main").empty();
+  questionId = 0;
+
+  createQuestion();
+  $(".timer").append($("<span>").addClass("countdown").text("100"));
+  timer;
+};
+
 const createQuestion = function() {
   if(questionId < quiz.length) {
     const question = quiz[questionId].question;
@@ -82,6 +97,8 @@ const createQuestion = function() {
     $("main").append(questionHead, answers);
   
     questionId++;
+  } else {
+    endQuiz();
   }
 };
 
@@ -90,8 +107,8 @@ const beginTimer = () => {
   let timerInt = parseInt(timerStr);
   $("span.countdown").text(String(timerInt - 1));
   
-  if (timerInt == 1) {
-    clearInterval(countdown);
+  if (timerInt <= 1) {
+    endQuiz();
   };
 
   return timerStr;
@@ -111,11 +128,41 @@ const timerHandler = (event) => {
   }
 };
 
+const endQuiz = () => {
+  player.score = parseInt($("span.countdown").text());
+
+  clearInterval(countdown);
+  $("span.countdown").remove();
+  $("main").empty();
+  
+  if (player.score > 0) {
+  $("main").append("<h1>Congrats! You've completed the quiz.</h1>");
+
+  const resultsBtn = $("<button>").prop("type", "button").addClass("btn")
+  .text("Proceed to Results")
+  .click(() => {
+    $("main").empty();
+    $("main").append("<h1>Your Score: " + player.score + " points!</h1>");
+    $("main").append(retakeBtn);
+  });
+
+  const retakeBtn = $("<button>").prop("type", "button").addClass("btn")
+  .prop("id", "start-quiz")
+  .text("Retake Quiz")
+  .click(() => {
+    startQuiz();
+  });
+
+  $("main").append(resultsBtn);
+  } else {
+    $("main").append("<h1>You've failed the quiz. Better luck next time!</h1>");
+
+    $("main").append(retakeBtn);
+  }
+};
+
 $("#start-quiz").click(() => {
-  $("#start-quiz").remove();
-  createQuestion();
-  $(".timer").append($("<span>").addClass("countdown").text("100"));
-  beginTimer;
+  startQuiz();
 });
 
 $("main").on("click", "#answer-choice", () => {
@@ -124,3 +171,5 @@ $("main").on("click", "#answer-choice", () => {
 });
 
 $("main").on("click", "#answer-choice", timerHandler);
+
+
